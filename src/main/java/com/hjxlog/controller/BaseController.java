@@ -2,13 +2,16 @@ package com.hjxlog.controller;
 
 import com.hjxlog.exception.BaseRuntimeException;
 import com.hjxlog.enums.ResultMessageEnum;
+import com.hjxlog.protocol.MapResult;
 import com.hjxlog.protocol.PageListResult;
 import com.hjxlog.protocol.Result;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Huang JX
@@ -49,6 +52,18 @@ public class BaseController {
         list.add("hello");
         list.add("world");
         return new PageListResult<>(list);
+    }
+
+    @RequestMapping("/get-map")
+    public MapResult<String, String> getMap() {
+        MapResult<String, String> result = new MapResult<>();
+        Map map = new HashMap<String, String>();
+        map.put("k1", "hello");
+        map.put("k2", "world");
+        result.setCode("0");
+        result.setMsg("获取map数据");
+        result.setBody(map);
+        return result;
     }
 
     @RequestMapping("/get-exception")
