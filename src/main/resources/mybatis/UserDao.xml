@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hjxlog.dao.UserDao">
+
+    <resultMap id="UserMap" type="com.hjxlog.model.User">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="all_column_list">
+		id, username, password
+	</sql>
+
+    <select id="selectByPrimaryKey" resultMap="UserMap">
+        select
+        <include refid="all_column_list"/>
+        from user
+        where
+        id=#{id,jdbcType=BIGINT}
+
+    </select>
+
+    <insert id="insert" parameterType="com.hjxlog.model.User">
+        insert into user
+        (
+        <include refid="all_column_list"/>
+        )
+        values
+        (
+        #{id,jdbcType=BIGINT},
+        #{username,jdbcType=VARCHAR},
+        #{password,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.hjxlog.model.User">
+	    update
+			user
+		set
+    		id = #{id,jdbcType=BIGINT},
+    		username = #{username,jdbcType=VARCHAR},
+    		password = #{password,jdbcType=VARCHAR}
+		where
+			id=#{id,jdbcType=BIGINT}
+			
+	</update>
+
+    <delete id="delete">
+	    delete from
+			user
+		where
+			id=#{id,jdbcType=BIGINT}
+			
+	</delete>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+
+        <foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+            insert into user
+            (
+            <include refid="all_column_list"/>
+            )
+            values
+            (
+            #{item.id,jdbcType=BIGINT},
+            #{item.username,jdbcType=VARCHAR},
+            #{item.password,jdbcType=VARCHAR}
+            )
+        </foreach>
+
+    </insert>
+
+    <update id="updateBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+            update
+            user
+            set
+            id = #{item.id,jdbcType=BIGINT},
+            username = #{item.username,jdbcType=VARCHAR},
+            password = #{item.password,jdbcType=VARCHAR}
+            where
+            id=#{item.id,jdbcType=BIGINT}
+
+        </foreach>
+    </update>
+
+    <delete id="deleteBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+            delete from
+            user
+            where
+            id=#{item.id,jdbcType=BIGINT}
+
+        </foreach>
+    </delete>
+
+    <select id="selectAll" parameterType="com.hjxlog.model.User"
+            resultMap="UserMap">
+        select
+        <include refid="all_column_list"/>
+        from user
+        <where>
+            <if test="id != null ">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="username != null and username != '' ">
+                <bind name="usernameBind" value="'%' + username + '%'"/>
+                and username like #{usernameBind}
+            </if>
+            <if test="password != null and password != '' ">
+                <bind name="passwordBind" value="'%' + password + '%'"/>
+                and password like #{passwordBind}
+            </if>
+        </where>
+    </select>
+
+</mapper>

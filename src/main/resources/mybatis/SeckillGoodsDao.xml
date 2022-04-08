@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hjxlog.dao.SeckillGoodsDao">
+
+    <resultMap id="SeckillGoodsMap" type="com.hjxlog.model.SeckillGoods">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="goods_id" property="goodsId" jdbcType="BIGINT"/>
+        <result column="seckill_price" property="seckillPrice" jdbcType="DECIMAL"/>
+        <result column="stock_count" property="stockCount" jdbcType="INTEGER"/>
+        <result column="start_date" property="startDate" jdbcType="TIMESTAMP"/>
+        <result column="end_date" property="endDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="all_column_list">
+		id, goods_id, seckill_price, stock_count, start_date, end_date
+	</sql>
+
+    <select id="selectByPrimaryKey" resultMap="SeckillGoodsMap">
+        select
+        <include refid="all_column_list"/>
+        from seckill_goods
+        where
+        id=#{id,jdbcType=BIGINT}
+
+    </select>
+
+    <insert id="insert" parameterType="com.hjxlog.model.SeckillGoods">
+        insert into seckill_goods
+        (
+        <include refid="all_column_list"/>
+        )
+        values
+        (
+        #{id,jdbcType=BIGINT},
+        #{goodsId,jdbcType=BIGINT},
+        #{seckillPrice,jdbcType=DECIMAL},
+        #{stockCount,jdbcType=INTEGER},
+        #{startDate,jdbcType=TIMESTAMP},
+        #{endDate,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.hjxlog.model.SeckillGoods">
+	    update
+			seckill_goods
+		set
+    		id = #{id,jdbcType=BIGINT},
+    		goods_id = #{goodsId,jdbcType=BIGINT},
+    		seckill_price = #{seckillPrice,jdbcType=DECIMAL},
+    		stock_count = #{stockCount,jdbcType=INTEGER},
+    		start_date = #{startDate,jdbcType=TIMESTAMP},
+    		end_date = #{endDate,jdbcType=TIMESTAMP}
+		where
+			id=#{id,jdbcType=BIGINT}
+			
+	</update>
+
+    <delete id="delete">
+	    delete from
+			seckill_goods
+		where
+			id=#{id,jdbcType=BIGINT}
+			
+	</delete>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+
+        <foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+            insert into seckill_goods
+            (
+            <include refid="all_column_list"/>
+            )
+            values
+            (
+            #{item.id,jdbcType=BIGINT},
+            #{item.goodsId,jdbcType=BIGINT},
+            #{item.seckillPrice,jdbcType=DECIMAL},
+            #{item.stockCount,jdbcType=INTEGER},
+            #{item.startDate,jdbcType=TIMESTAMP},
+            #{item.endDate,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+
+    </insert>
+
+    <update id="updateBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+            update
+            seckill_goods
+            set
+            id = #{item.id,jdbcType=BIGINT},
+            goods_id = #{item.goodsId,jdbcType=BIGINT},
+            seckill_price = #{item.seckillPrice,jdbcType=DECIMAL},
+            stock_count = #{item.stockCount,jdbcType=INTEGER},
+            start_date = #{item.startDate,jdbcType=TIMESTAMP},
+            end_date = #{item.endDate,jdbcType=TIMESTAMP}
+            where
+            id=#{item.id,jdbcType=BIGINT}
+
+        </foreach>
+    </update>
+
+    <delete id="deleteBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+            delete from
+            seckill_goods
+            where
+            id=#{item.id,jdbcType=BIGINT}
+
+        </foreach>
+    </delete>
+
+    <select id="selectAll" parameterType="com.hjxlog.model.SeckillGoods"
+            resultMap="SeckillGoodsMap">
+        select
+        <include refid="all_column_list"/>
+        from seckill_goods
+        <where>
+            <if test="id != null ">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="goodsId != null ">
+                and goods_id = #{goodsId,jdbcType=BIGINT}
+            </if>
+            <if test="seckillPrice != null ">
+                and seckill_price = #{seckillPrice,jdbcType=DECIMAL}
+            </if>
+            <if test="stockCount != null ">
+                and stock_count = #{stockCount,jdbcType=INTEGER}
+            </if>
+            <if test="startDate != null ">
+                and start_date = #{startDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endDate != null ">
+                and end_date = #{endDate,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </select>
+
+</mapper>

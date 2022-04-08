@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hjxlog.dao.GoodsDao">
+
+    <resultMap id="GoodsMap" type="com.hjxlog.model.Goods">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="img" property="img" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="DECIMAL"/>
+        <result column="stock" property="stock" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="all_column_list">
+		id, name, title, img, price, stock
+	</sql>
+
+    <select id="selectByPrimaryKey" resultMap="GoodsMap">
+        select
+        <include refid="all_column_list"/>
+        from goods
+        where
+        id=#{id,jdbcType=INTEGER}
+
+    </select>
+
+    <insert id="insert" parameterType="com.hjxlog.model.Goods">
+        insert into goods
+        (
+        <include refid="all_column_list"/>
+        )
+        values
+        (
+        #{id,jdbcType=INTEGER},
+        #{name,jdbcType=VARCHAR},
+        #{title,jdbcType=VARCHAR},
+        #{img,jdbcType=VARCHAR},
+        #{price,jdbcType=DECIMAL},
+        #{stock,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.hjxlog.model.Goods">
+	    update
+			goods
+		set
+    		id = #{id,jdbcType=INTEGER},
+    		name = #{name,jdbcType=VARCHAR},
+    		title = #{title,jdbcType=VARCHAR},
+    		img = #{img,jdbcType=VARCHAR},
+    		price = #{price,jdbcType=DECIMAL},
+    		stock = #{stock,jdbcType=INTEGER}
+		where
+			id=#{id,jdbcType=INTEGER}
+			
+	</update>
+
+    <delete id="delete">
+	    delete from
+			goods
+		where
+			id=#{id,jdbcType=INTEGER}
+			
+	</delete>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+
+        <foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+            insert into goods
+            (
+            <include refid="all_column_list"/>
+            )
+            values
+            (
+            #{item.id,jdbcType=INTEGER},
+            #{item.name,jdbcType=VARCHAR},
+            #{item.title,jdbcType=VARCHAR},
+            #{item.img,jdbcType=VARCHAR},
+            #{item.price,jdbcType=DECIMAL},
+            #{item.stock,jdbcType=INTEGER}
+            )
+        </foreach>
+
+    </insert>
+
+    <update id="updateBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+            update
+            goods
+            set
+            id = #{item.id,jdbcType=INTEGER},
+            name = #{item.name,jdbcType=VARCHAR},
+            title = #{item.title,jdbcType=VARCHAR},
+            img = #{item.img,jdbcType=VARCHAR},
+            price = #{item.price,jdbcType=DECIMAL},
+            stock = #{item.stock,jdbcType=INTEGER}
+            where
+            id=#{item.id,jdbcType=INTEGER}
+
+        </foreach>
+    </update>
+
+    <delete id="deleteBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+            delete from
+            goods
+            where
+            id=#{item.id,jdbcType=INTEGER}
+
+        </foreach>
+    </delete>
+
+    <select id="selectAll" parameterType="com.hjxlog.model.Goods"
+            resultMap="GoodsMap">
+        select
+        <include refid="all_column_list"/>
+        from goods
+        <where>
+            <if test="id != null ">
+                and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="name != null and name != '' ">
+                <bind name="nameBind" value="'%' + name + '%'"/>
+                and name like #{nameBind}
+            </if>
+            <if test="title != null and title != '' ">
+                <bind name="titleBind" value="'%' + title + '%'"/>
+                and title like #{titleBind}
+            </if>
+            <if test="img != null and img != '' ">
+                <bind name="imgBind" value="'%' + img + '%'"/>
+                and img like #{imgBind}
+            </if>
+            <if test="price != null ">
+                and price = #{price,jdbcType=DECIMAL}
+            </if>
+            <if test="stock != null ">
+                and stock = #{stock,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+</mapper>

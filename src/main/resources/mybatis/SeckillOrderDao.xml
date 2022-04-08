@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hjxlog.dao.SeckillOrderDao">
+
+    <resultMap id="SeckillOrderMap" type="com.hjxlog.model.SeckillOrder">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="order_id" property="orderId" jdbcType="BIGINT"/>
+        <result column="goods_id" property="goodsId" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="all_column_list">
+		id, user_id, order_id, goods_id
+	</sql>
+
+    <select id="selectByPrimaryKey" resultMap="SeckillOrderMap">
+        select
+        <include refid="all_column_list"/>
+        from seckill_order
+        where
+        id=#{id,jdbcType=BIGINT}
+
+    </select>
+
+    <insert id="insert" parameterType="com.hjxlog.model.SeckillOrder">
+        insert into seckill_order
+        (
+        <include refid="all_column_list"/>
+        )
+        values
+        (
+        #{id,jdbcType=BIGINT},
+        #{userId,jdbcType=BIGINT},
+        #{orderId,jdbcType=BIGINT},
+        #{goodsId,jdbcType=BIGINT}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.hjxlog.model.SeckillOrder">
+	    update
+			seckill_order
+		set
+    		id = #{id,jdbcType=BIGINT},
+    		user_id = #{userId,jdbcType=BIGINT},
+    		order_id = #{orderId,jdbcType=BIGINT},
+    		goods_id = #{goodsId,jdbcType=BIGINT}
+		where
+			id=#{id,jdbcType=BIGINT}
+			
+	</update>
+
+    <delete id="delete">
+	    delete from
+			seckill_order
+		where
+			id=#{id,jdbcType=BIGINT}
+			
+	</delete>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+
+        <foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+            insert into seckill_order
+            (
+            <include refid="all_column_list"/>
+            )
+            values
+            (
+            #{item.id,jdbcType=BIGINT},
+            #{item.userId,jdbcType=BIGINT},
+            #{item.orderId,jdbcType=BIGINT},
+            #{item.goodsId,jdbcType=BIGINT}
+            )
+        </foreach>
+
+    </insert>
+
+    <update id="updateBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+            update
+            seckill_order
+            set
+            id = #{item.id,jdbcType=BIGINT},
+            user_id = #{item.userId,jdbcType=BIGINT},
+            order_id = #{item.orderId,jdbcType=BIGINT},
+            goods_id = #{item.goodsId,jdbcType=BIGINT}
+            where
+            id=#{item.id,jdbcType=BIGINT}
+
+        </foreach>
+    </update>
+
+    <delete id="deleteBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close="end;" separator=";">
+            delete from
+            seckill_order
+            where
+            id=#{item.id,jdbcType=BIGINT}
+
+        </foreach>
+    </delete>
+
+    <select id="selectAll" parameterType="com.hjxlog.model.SeckillOrder"
+            resultMap="SeckillOrderMap">
+        select
+        <include refid="all_column_list"/>
+        from seckill_order
+        <where>
+            <if test="id != null ">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null ">
+                and user_id = #{userId,jdbcType=BIGINT}
+            </if>
+            <if test="orderId != null ">
+                and order_id = #{orderId,jdbcType=BIGINT}
+            </if>
+            <if test="goodsId != null ">
+                and goods_id = #{goodsId,jdbcType=BIGINT}
+            </if>
+        </where>
+    </select>
+
+</mapper>
